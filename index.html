@@ -3,194 +3,286 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wanna pull up?</title>
+<title>Line Dance Potluck</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  /* ======== SETUP: the only part you'd ever edit ======== */
-  /* (Form settings live in the <script> at the bottom.)     */
-
   :root {
     color-scheme: light;
-    --sky-top: #2b5fe0;
-    --sky-bottom: #0f2f8f;
-    --ink: #ffffff;
-    --ink-soft: rgba(255, 255, 255, 0.78);
-    --chip: rgba(255, 255, 255, 0.14);
-    --chip-hover: rgba(255, 255, 255, 0.24);
-    --chip-line: rgba(255, 255, 255, 0.45);
-    --picked-bg: #ffffff;
-    --picked-ink: #0f2f8f;
-    --send-bg: #ffd84d;
-    --send-ink: #0f2f8f;
-    --banner-bg: rgba(255, 255, 255, 0.92);
-    --banner-ink: #0f2f8f;
-    --font: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --card: rgba(255, 249, 240, 0.84);
+    --card-line: rgba(196, 110, 50, 0.35);
+    --ink: #4a2414;
+    --ink-soft: #85563a;
+    --accent: #c9502a;
+    --accent-ink: #fff8ee;
+    --pill: rgba(251, 226, 196, 0.9);
+    --pill-line: #e6b682;
+    --field: rgba(255, 246, 234, 0.95);
+    --banner-bg: #4a2414;
+    --banner-ink: #fdf1e2;
+    --title-font: "Rye", "Rockwell", Georgia, serif;
+    --body-font: "Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --sky-top: #1d47b8;
-      --sky-bottom: #081d5e;
-      --picked-ink: #081d5e;
-      --banner-ink: #081d5e;
+      --card: rgba(46, 27, 17, 0.86);
+      --card-line: rgba(232, 150, 90, 0.35);
+      --ink: #fbe9d3;
+      --ink-soft: #dcb593;
+      --accent: #e8743a;
+      --accent-ink: #26170f;
+      --pill: rgba(78, 50, 32, 0.95);
+      --pill-line: #7a5235;
+      --field: rgba(36, 22, 14, 0.95);
+      --banner-bg: #fbe9d3;
+      --banner-ink: #26170f;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --sky-top: #1d47b8;
-    --sky-bottom: #081d5e;
-    --picked-ink: #081d5e;
-    --banner-ink: #081d5e;
+    --card: rgba(46, 27, 17, 0.86);
+    --card-line: rgba(232, 150, 90, 0.35);
+    --ink: #fbe9d3;
+    --ink-soft: #dcb593;
+    --accent: #e8743a;
+    --accent-ink: #26170f;
+    --pill: rgba(78, 50, 32, 0.95);
+    --pill-line: #7a5235;
+    --field: rgba(36, 22, 14, 0.95);
+    --banner-bg: #fbe9d3;
+    --banner-ink: #26170f;
   }
 
   * { box-sizing: border-box; margin: 0; }
-  html, body { height: 100%; }
   :root {
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); background: #fde9d2; }
   body {
-    font-family: var(--font);
+    position: relative;
+    font-family: var(--body-font);
     color: var(--ink);
-    background: var(--sky-bottom);
-    background-image: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
-    background-attachment: fixed;
+    background: #fde9d2;
+    line-height: 1.5;
     overflow-x: hidden;
+    min-height: 100%;
   }
 
-  #snow {
+  /* ===== The landscape runs the full height of the page ===== */
+  .scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, #fde9d2 0, #f9cf9f 420px, #f6bd83 900px);
+  }
+  .sun {
+    position: absolute;
+    top: 70px;
+    right: -40px;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    background: #fff4e1;
+  }
+  .cloud {
+    position: absolute;
+    left: -5%;
+    width: 110%;
+    height: 70px;
+  }
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .band > svg.crest {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    bottom: 100%;
+    margin-bottom: -1px;
+  }
+  .b1 { top: 15%; background: #eaa46e; }
+  .b2 { top: 31%; background: #e0844a; }
+  .b3 { top: 48%; background: #f0b245; }
+  .b4 { top: 64%; background: #e79a3c; }
+  .b5 { top: 81%; background: #cf6a34; }
+  .rows {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(170deg, transparent 0 22px, rgba(160, 70, 20, 0.12) 22px 30px);
+  }
+
+  .decor {
+    position: absolute;
+    transform: translateY(-100%);
+  }
+  .decor svg { display: block; width: 100%; height: auto; }
+  @media (min-width: 900px) {
+    .decor { scale: 1.7; transform-origin: 50% 100%; }
+    .decor.top-row { scale: 1.15; }
+    .sun { width: 340px; height: 340px; right: 4%; }
+  }
+
+  .dancefloor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 210px;
+  }
+  .planks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+    background:
+      repeating-linear-gradient(90deg, rgba(60, 25, 10, 0.25) 0 2px, transparent 2px 70px),
+      linear-gradient(180deg, #a85a2e, #8a4523);
+  }
+  .boots {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    width: min(100%, 620px);
+    transform: translateX(-50%);
+  }
+  .boots svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .leg { transform-box: view-box; animation: step 1.6s ease-in-out infinite; }
+  .leg.d2 { animation-delay: -0.4s; }
+  .leg.d3 { animation-delay: -0.8s; }
+  .leg.d4 { animation-delay: -1.2s; }
+  .blades { transform-box: fill-box; transform-origin: center; animation: spin 9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes step {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-9deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(7deg); }
+  }
+
+  #leaves, #burst {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
+  }
+  #burst { z-index: 3; }
+
+  /* ===== Content ===== */
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 240px;
   }
 
-  main {
+  .sign {
     position: relative;
-    z-index: 1;
-    min-height: 100%;
-    display: grid;
-    place-items: center;
-    padding: 2rem 1.25rem;
+    margin: 2.25rem auto 0;
+    width: fit-content;
+    max-width: 100%;
+    padding: 1rem 1.5rem 1.1rem;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 30px, rgba(50, 20, 8, 0.25) 30px 32px),
+      linear-gradient(180deg, #9b522b, #7e3f20);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 0 #5b2a14;
+  }
+  .sign::before, .sign::after {
+    content: "";
+    position: absolute;
+    top: -2.25rem;
+    width: 3px;
+    height: 2.25rem;
+    background: #6b3a1f;
+  }
+  .sign::before { left: 18%; }
+  .sign::after { right: 18%; }
+  .sign h1 {
+    font-family: var(--title-font);
+    font-weight: 400;
+    font-size: clamp(2rem, 9vw, 3.75rem);
+    line-height: 1.05;
+    color: #fff1db;
+    text-align: center;
+    text-wrap: balance;
+    text-shadow: 0 2px 0 rgba(60, 20, 5, 0.5);
   }
 
   .card {
-    width: 100%;
-    max-width: 30rem;
-    text-align: center;
-  }
-
-  h1 {
-    font-weight: 800;
-    font-size: clamp(3rem, 14vw, 5.5rem);
-    line-height: 0.92;
-    letter-spacing: -0.035em;
-    font-variation-settings: "opsz" 96;
-    text-wrap: balance;
-  }
-
-  .sub {
     margin-top: 1rem;
-    font-size: 1.125rem;
-    line-height: 1.5;
-    color: var(--ink-soft);
+    background: var(--card);
+    border: 1.5px solid var(--card-line);
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.375rem 1.375rem;
   }
+  .intro { margin-top: 9rem; }
+  .intro p { font-size: 1.0625rem; }
+  .intro p + p { margin-top: 0.75rem; }
 
-  .choices {
-    margin-top: 2.5rem;
-    display: grid;
-    gap: 0.75rem;
+  .card > label, .card legend {
+    display: block;
+    font-weight: 800;
+    font-size: 1.0625rem;
+    margin-bottom: 0.75rem;
+    padding: 0;
   }
+  fieldset.card { min-width: 0; }
+  .card legend { float: left; width: 100%; }
+  .card legend + * { clear: both; }
 
-  .choice {
+  .card input[type="text"], .card input[type="tel"], .card textarea {
+    width: 100%;
     font: inherit;
-    font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     color: var(--ink);
-    background: var(--chip);
-    border: 1.5px solid var(--chip-line);
+    background: var(--field);
+    border: 1.5px solid var(--pill-line);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.875rem;
+  }
+  .card textarea { min-height: 5.5rem; resize: vertical; }
+  .card input::placeholder, .card textarea::placeholder { color: var(--ink-soft); opacity: 0.85; }
+  .card input:focus-visible, .card textarea:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+
+  .opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .opt { position: relative; }
+  .opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .opt span {
+    display: inline-block;
+    font-weight: 600;
+    background: var(--pill);
+    border: 1.5px solid var(--pill-line);
     border-radius: 999px;
-    padding: 1rem 1.5rem;
+    padding: 0.6rem 1.1rem;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .choice:hover { background: var(--chip-hover); }
-  .choice:active { transform: scale(0.98); }
-  .choice:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-  .choice[aria-pressed="true"] {
-    background: var(--picked-bg);
-    color: var(--picked-ink);
-    border-color: var(--picked-bg);
-  }
-  .choice:disabled { cursor: default; }
+  .opt input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .opt input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt input:disabled + span { cursor: default; }
 
-  .name {
-    margin-top: 2.5rem;
-    text-align: left;
-  }
-  .name label {
-    display: block;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  .name input {
-    width: 100%;
+  .clear {
+    margin-top: 0.625rem;
     font: inherit;
-    font-size: 1.125rem;
-    color: var(--ink);
-    background: var(--chip);
-    border: 1.5px solid var(--chip-line);
-    border-radius: 0.875rem;
-    padding: 0.875rem 1rem;
-  }
-  .name input::placeholder { color: var(--ink-soft); }
-  .name input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-  .name[hidden] { display: none; }
-  .name + .choices { margin-top: 1.25rem; }
-
-  .send {
-    margin-top: 1.5rem;
-    width: 100%;
-    font: inherit;
-    font-weight: 800;
-    font-size: 1.25rem;
-    color: var(--send-ink);
-    background: var(--send-bg);
-    border: 0;
-    border-radius: 999px;
-    padding: 1.05rem 1.5rem;
-    cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-  }
-  .send:active { transform: scale(0.98); }
-  .send:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-  .send:disabled { opacity: 0.35; cursor: default; }
-  .send[hidden] { display: none; }
-  .choice:disabled:not([aria-pressed="true"]) { opacity: 0.45; }
-
-  .done {
-    margin-top: 2rem;
-    min-height: 3.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.4;
-  }
-  .done small {
-    display: block;
-    margin-top: 0.25rem;
-    font-size: 0.95rem;
-    font-weight: 400;
+    font-size: 0.9rem;
     color: var(--ink-soft);
-  }
-  .linklike {
-    font: inherit;
-    color: inherit;
     background: none;
     border: 0;
     padding: 0;
@@ -198,18 +290,51 @@
     text-underline-offset: 3px;
     cursor: pointer;
   }
-  .linklike:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .clear[hidden] { display: none; }
+
+  .actions { margin-top: 1.5rem; }
+  .submit {
+    width: 100%;
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #7e2f15;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #7e2f15; }
+  .submit:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .submit:disabled { opacity: 0.6; cursor: default; }
+  .submit[hidden] { display: none; }
+
+  .done {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+  .done:empty { display: none; }
+  .done {
+    background: var(--card);
+    border: 1.5px solid var(--card-line);
+    border-radius: 1rem;
+    padding: 0.875rem 1rem;
+  }
 
   .banner {
     position: fixed;
     left: 50%;
     bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 4;
     background: var(--banner-bg);
     color: var(--banner-ink);
     font-size: 0.875rem;
-    line-height: 1.4;
     padding: 0.6rem 1rem;
     border-radius: 0.75rem;
     width: max-content;
@@ -219,197 +344,428 @@
   .banner[hidden] { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .choice, .send { transition: none; }
+    .opt span, .submit { transition: none; }
+    .leg, .blades { animation: none; }
   }
 </style>
 </head>
 <body>
-<canvas id="snow" aria-hidden="true"></canvas>
 
-<main>
-  <div class="card">
-    <h1>yoooo wanna pull up?</h1>
-    <p class="sub">Pick one, then send your RSVP.</p>
+<!-- Reusable drawings -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="tree" viewBox="0 0 120 160">
+      <path d="M54 160 L58 70 L62 70 L66 160 Z" fill="#7a3a28"/>
+      <path d="M60 100 L38 78 M60 90 L84 70" stroke="#7a3a28" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="34" cy="66" r="28" fill="#e2622a"/>
+      <circle cx="86" cy="60" r="30" fill="#f08b25"/>
+      <circle cx="60" cy="38" r="32" fill="#f6b23c"/>
+      <circle cx="96" cy="88" r="18" fill="#e2622a"/>
+      <circle cx="26" cy="92" r="14" fill="#f08b25"/>
+    </symbol>
+    <symbol id="tree-thin" viewBox="0 0 60 150">
+      <path d="M27 150 L30 40 L33 150 Z" fill="#7a3a28"/>
+      <ellipse cx="30" cy="52" rx="22" ry="44" fill="#d9562a"/>
+      <path d="M30 20 L30 96" stroke="#b8432c" stroke-width="2"/>
+    </symbol>
+    <symbol id="barn" viewBox="0 0 140 120">
+      <rect x="10" y="50" width="120" height="70" fill="#b6412a"/>
+      <path d="M0 54 L36 18 L104 18 L140 54 Z" fill="#7c2c1d"/>
+      <rect x="50" y="70" width="40" height="50" fill="#fff1dd"/>
+      <path d="M50 70 L90 120 M90 70 L50 120" stroke="#b6412a" stroke-width="4"/>
+      <rect x="58" y="30" width="24" height="16" fill="#fff1dd"/>
+      <path d="M58 38 H82 M70 30 V46" stroke="#b6412a" stroke-width="2"/>
+    </symbol>
+    <symbol id="windmill" viewBox="0 0 100 150">
+      <path d="M38 150 L44 60 L56 60 L62 150 Z" fill="#c9722f"/>
+      <path d="M42 60 L50 48 L58 60 Z" fill="#7c2c1d"/>
+      <g transform="translate(50 56)">
+        <g class="blades">
+          <rect x="-4" y="-46" width="8" height="46" fill="#8a4126"/>
+          <rect x="-4" y="0" width="8" height="46" fill="#8a4126"/>
+          <rect x="-46" y="-4" width="46" height="8" fill="#8a4126"/>
+          <rect x="0" y="-4" width="46" height="8" fill="#8a4126"/>
+        </g>
+        <circle r="5" fill="#7c2c1d"/>
+      </g>
+    </symbol>
+    <symbol id="hay" viewBox="0 0 160 70">
+      <rect x="0" y="22" width="90" height="48" rx="8" fill="#f2c25a"/>
+      <path d="M8 34 H82 M8 46 H82 M8 58 H82" stroke="#d99a2e" stroke-width="3"/>
+      <rect x="28" y="22" width="5" height="48" fill="#b8432c"/>
+      <rect x="60" y="22" width="5" height="48" fill="#b8432c"/>
+      <ellipse cx="128" cy="50" rx="26" ry="20" fill="#e2622a"/>
+      <path d="M128 31 C 120 40 120 60 128 70 M128 31 C 136 40 136 60 128 70" stroke="#c24a1f" stroke-width="2.5" fill="none"/>
+      <path d="M128 31 L130 22" stroke="#5f6b2a" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="102" cy="60" rx="14" ry="10" fill="#f08b25"/>
+    </symbol>
+    <symbol id="fence" viewBox="0 0 200 50">
+      <g stroke="#8a4126" stroke-width="5" stroke-linecap="round">
+        <path d="M10 50 V8 M60 50 V8 M110 50 V8 M160 50 V8"/>
+        <path d="M4 20 H196 M4 36 H196"/>
+      </g>
+    </symbol>
+    <symbol id="tufts" viewBox="0 0 80 40">
+      <g fill="#b84a25">
+        <path d="M6 40 C 8 24, 12 16, 18 10 C 15 22, 15 30, 17 40 Z"/>
+        <path d="M24 40 C 26 28, 32 18, 40 12 C 34 24, 33 32, 34 40 Z"/>
+        <path d="M50 40 C 51 30, 54 24, 58 20 C 56 28, 56 34, 57 40 Z"/>
+      </g>
+      <circle cx="18" cy="9" r="3.5" fill="#e2622a"/><circle cx="40" cy="11" r="3.5" fill="#e2622a"/><circle cx="58" cy="19" r="3" fill="#f08b25"/>
+    </symbol>
+  </defs>
+</svg>
 
-    <div class="name" id="nameWrap" hidden>
-      <label for="name">Your name</label>
-      <input id="name" type="text" autocomplete="name" placeholder="So we know who’s coming">
+<div class="scene" aria-hidden="true">
+  <div class="sun"></div>
+  <svg class="cloud" style="top:40px" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 40 C 70 10, 130 60, 210 32 S 340 12, 400 34 L400 48 C 330 28, 270 62, 205 48 S 70 34, 0 56 Z" fill="#fff6ea" opacity="0.75"/></svg>
+  <svg class="cloud" style="top:230px" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M40 40 C 110 22, 180 52, 280 32 L280 42 C 190 62, 110 36, 40 50 Z" fill="#fff6ea" opacity="0.55"/></svg>
+
+  <div class="band b1"><svg class="crest" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 50 C 60 10, 120 20, 180 40 S 300 6, 400 34 L400 70 L0 70 Z" fill="#eaa46e"/></svg></div>
+  <div class="band b2"><svg class="crest" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 30 C 80 60, 160 10, 240 34 S 360 50, 400 20 L400 70 L0 70 Z" fill="#e0844a"/></svg></div>
+  <div class="band b3"><svg class="crest" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 44 C 90 14, 170 22, 250 40 S 350 26, 400 36 L400 70 L0 70 Z" fill="#f0b245"/></svg><div class="rows"></div></div>
+  <div class="band b4"><svg class="crest" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 24 C 70 50, 150 44, 220 28 S 340 14, 400 40 L400 70 L0 70 Z" fill="#e79a3c"/></svg></div>
+  <div class="band b5"><svg class="crest" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 40 C 100 20, 200 30, 300 44 S 380 36, 400 30 L400 70 L0 70 Z" fill="#cf6a34"/></svg></div>
+
+  <!-- things standing on the hills, down both sides -->
+  <div class="decor top-row" style="top:calc(15% + 10px); left:-40px; width:190px"><svg><use href="#tree"/></svg></div>
+  <div class="decor top-row" style="top:calc(15% + 14px); right:6%; width:70px"><svg><use href="#windmill"/></svg></div>
+  <div class="decor" style="top:calc(31% + 14px); right:-30px; width:170px"><svg><use href="#barn"/></svg></div>
+  <div class="decor" style="top:calc(31% + 22px); left:-10px; width:160px"><svg><use href="#fence"/></svg></div>
+  <div class="decor" style="top:calc(48% + 8px); left:-24px; width:170px"><svg><use href="#hay"/></svg></div>
+  <div class="decor" style="top:calc(48% + 4px); right:-14px; width:60px"><svg><use href="#tree-thin"/></svg></div>
+  <div class="decor" style="top:calc(48% + 14px); right:34px; width:44px"><svg><use href="#tree-thin"/></svg></div>
+  <div class="decor" style="top:calc(64% + 16px); right:-46px; width:180px"><svg><use href="#tree"/></svg></div>
+  <div class="decor" style="top:calc(64% + 18px); left:-6px; width:90px"><svg><use href="#tufts"/></svg></div>
+  <div class="decor" style="top:calc(81% + 16px); left:-30px; width:150px"><svg><use href="#fence"/></svg></div>
+  <div class="decor" style="top:calc(81% + 12px); right:-8px; width:90px"><svg><use href="#tufts"/></svg></div>
+
+  <!-- the dance floor at the bottom -->
+  <div class="dancefloor">
+    <div class="planks"></div>
+    <div class="boots">
+      <svg viewBox="0 0 400 124">
+        <defs>
+          <g id="legL">
+            <path d="M-12 0 L12 0 L12 62 L-12 62 Z" fill="var(--jean)"/>
+            <path d="M-11 54 L11 54 L13 100 L-11 100 Z" fill="var(--boot)"/>
+            <path d="M-14 50 L14 50 L13 62 L-13 62 Z" fill="var(--jean)"/>
+            <path d="M-13 62 L13 62" stroke="rgba(0,0,0,0.18)" stroke-width="2"/>
+            <path d="M-5 68 C 1 76, 1 84, -4 92 M5 68 C -1 76, -1 84, 4 92" stroke="#fbd9a8" stroke-width="1.8" fill="none" opacity="0.85"/>
+            <path d="M-11 98 L13 98 C 24 98, 33 103, 37 112 L-11 112 Z" fill="var(--boot)"/>
+            <rect x="-12" y="112" width="11" height="7" fill="#3a1a0d"/>
+            <path d="M-1 112 L37 112 L37 115 L-1 115 Z" fill="#3a1a0d"/>
+          </g>
+        </defs>
+        <!-- dancer 1 -->
+        <g style="--jean:#3e5d8a; --boot:#a23a24">
+          <use href="#legL" x="40" y="4"/>
+          <g class="leg" style="transform-origin:66px 4px"><use href="#legL" x="66" y="4"/></g>
+        </g>
+        <!-- dancer 2 -->
+        <g style="--jean:#2f3f66; --boot:#c8532c">
+          <use href="#legL" x="116" y="4"/>
+          <g class="leg d2" style="transform-origin:142px 4px"><use href="#legL" x="142" y="4"/></g>
+        </g>
+        <!-- dancer 3 -->
+        <g style="--jean:#6b8fb5; --boot:#7a3b22">
+          <use href="#legL" x="192" y="4"/>
+          <g class="leg d3" style="transform-origin:218px 4px"><use href="#legL" x="218" y="4"/></g>
+        </g>
+        <!-- dancer 4 -->
+        <g style="--jean:#45577a; --boot:#d0741f">
+          <use href="#legL" x="268" y="4"/>
+          <g class="leg d4" style="transform-origin:294px 4px"><use href="#legL" x="294" y="4"/></g>
+        </g>
+        <!-- dancer 5 -->
+        <g style="--jean:#33496e; --boot:#8c2f2a">
+          <use href="#legL" x="338" y="4"/>
+          <g class="leg d2" style="transform-origin:364px 4px"><use href="#legL" x="364" y="4"/></g>
+        </g>
+      </svg>
     </div>
+  </div>
+</div>
 
-    <div class="choices" role="group" aria-label="RSVP">
-      <button class="choice" type="button" data-value="Yes" aria-pressed="false">Yes, I’m in</button>
-      <button class="choice" type="button" data-value="Maybe" aria-pressed="false">Maybe</button>
-      <button class="choice" type="button" data-value="No" aria-pressed="false">Can’t make it</button>
-    </div>
+<canvas id="leaves" aria-hidden="true"></canvas>
+<canvas id="burst" aria-hidden="true"></canvas>
 
-    <button class="send" id="send" type="button" disabled>Send RSVP</button>
+<div class="wrap">
+  <header class="sign"><h1 id="title"></h1></header>
+  <section class="card intro" id="intro"></section>
+  <form id="form" novalidate></form>
+  <div class="actions">
+    <button class="submit" id="submit" type="button">Submit</button>
     <p class="done" id="done" aria-live="polite"></p>
   </div>
-</main>
+</div>
 
-<p class="banner" id="banner" hidden>Preview: RSVPs aren’t connected to the Google Form yet.</p>
+<p class="banner" id="banner" hidden>Preview: answers aren’t connected to the Google Form yet.</p>
 
 <script>
-  /* ================= FORM SETTINGS ================= */
-  // Your Google Form's ID (the long part of the form link).
-  const FORM_ID = "1FAIpQLSdTyzunwzJyNV4TDzI_RuV8m1khjyByz2mb-asYna0mLQJWwg";
-  // The Yes/No/Maybe question's field ID.
-  const ENTRY_ID = "entry.1019363191";
-  // Optional: a "Your name" question's field ID. Leave "" to hide the name box.
-  const NAME_ENTRY_ID = "";
-  /* ================================================== */
-
-  const connected = ENTRY_ID.startsWith("entry.");
-  const askName = NAME_ENTRY_ID.startsWith("entry.");
-  const STORE_KEY = "rsvp-sent-" + FORM_ID;
-
-  const banner = document.getElementById("banner");
-  if (!connected) banner.hidden = false;
-
-  const buttons = Array.from(document.querySelectorAll(".choice"));
-  const send = document.getElementById("send");
-  const done = document.getElementById("done");
-  const nameWrap = document.getElementById("nameWrap");
-  const nameInput = document.getElementById("name");
-  if (askName) nameWrap.hidden = false;
-
-  const messages = {
-    Yes: ["Yesss. You’re on the list.", "See you there."],
-    Maybe: ["Noted as a maybe.", "Come if you can!"],
-    No: ["Got it, we’ll miss you.", "Next time."]
+  /* ============================================================
+     ALL THE TEXT LIVES HERE. Change it to match the Google Form.
+     Each question's "entry" is its field ID from a pre-filled link.
+     Choice options must match the form's options exactly.
+     ============================================================ */
+  const FORM = {
+    id: "1FAIpQLSe7J4wrS4qIbn4uhDAUyVmPPtukxsjmxGxLB_UUUJPr3krv4w",
+    title: "Line Dance Potluck",
+    description: [
+      "We host Potlucks every Sunday with a different theme each week!",
+      "Please fill out your information in the bottom if you would like to attend the upcoming potlucks (especially if we don't already have your contact information/ if you're new here).",
+      "This week will be potluck and line dancing lessons from Jaycee!",
+      "Additionally, we are opening up the potlucks to different hosts who would like to try it out. The activities/ theme will be determined by the host/hostess. :))"
+    ],
+    questions: [
+      { type: "short", title: "Name", entry: "entry.370441936", autocomplete: "name" },
+      { type: "short", title: "Contact Number", entry: "entry.1414244695", inputType: "tel", autocomplete: "tel" },
+      { type: "choice", title: "Have you been to a potluck before?", entry: "entry.396172983",
+        options: ["yes ofc", "no :("] },
+      { type: "choice", title: "How would you like to be contacted/ informed of the potlucks?", entry: "entry.247876647",
+        options: ["text (what have been doing)", "email to google form", "both"] },
+      { type: "long", title: "Would you be interested in hosting? If so, please state where you live/ where you would be hosting it.", entry: "entry.1925613659" },
+      { type: "long", title: "Comments and/or questions", entry: "entry.356994513" }
+    ],
+    confirmation: "Your response has been recorded."
   };
+  /* ============================================================ */
 
-  let picked = null;
+  const connected = FORM.questions.every(q => q.entry.startsWith("entry."));
+  const STORE_KEY = "form-sent-" + FORM.id;
+  document.getElementById("banner").hidden = connected;
 
-  function readSent() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
-  }
-  function saveSent(value) {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify({ value, at: Date.now() })); } catch (e) {}
-  }
-
-  function updateSend() {
-    const nameOk = !askName || nameInput.value.trim().length > 0;
-    send.disabled = !(picked && nameOk);
-  }
-
-  // Pick and re-pick freely; nothing is sent until "Send RSVP".
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      picked = btn.dataset.value;
-      buttons.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
-      updateSend();
-    });
+  // ---- Build the page from FORM ----
+  document.title = FORM.title;
+  document.getElementById("title").textContent = FORM.title;
+  const intro = document.getElementById("intro");
+  FORM.description.forEach(t => {
+    const p = document.createElement("p");
+    p.textContent = t;
+    intro.append(p);
   });
-  nameInput.addEventListener("input", updateSend);
 
-  async function sendToForm(value, name) {
-    if (!connected) return;
-    const body = new URLSearchParams();
-    body.append(ENTRY_ID, value);
-    if (askName) body.append(NAME_ENTRY_ID, name);
-    // Google doesn't let other sites read its reply ("no-cors"),
-    // so we send the answer and trust it landed, like a normal form.
-    await fetch(`https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`, {
-      method: "POST",
-      mode: "no-cors",
-      body
-    });
-  }
-
-  function lockAsSent(value) {
-    buttons.forEach(b => {
-      b.disabled = true;
-      b.setAttribute("aria-pressed", String(b.dataset.value === value));
-    });
-    nameInput.disabled = true;
-    send.hidden = true;
-    const [line, note] = messages[value] || ["RSVP sent.", ""];
-    done.textContent = "";
-    done.append(line);
-    const small = document.createElement("small");
-    small.textContent = note + " Need to change it? Just text us.";
-    done.append(small);
-  }
-
-  send.addEventListener("click", async () => {
-    if (!picked || send.disabled) return;
-    send.disabled = true;
-    send.textContent = "Sending…";
-    try {
-      await sendToForm(picked, nameInput.value.trim());
-      saveSent(picked);
-      lockAsSent(picked);
-    } catch (err) {
-      console.warn("RSVP send failed", err);
-      send.textContent = "Send RSVP";
-      send.disabled = false;
-      done.textContent = "That didn’t go through. Check your connection and tap Send RSVP again.";
+  const formEl = document.getElementById("form");
+  FORM.questions.forEach((q, i) => {
+    const id = "q" + i;
+    if (q.type === "choice") {
+      const fs = document.createElement("fieldset");
+      fs.className = "card";
+      const lg = document.createElement("legend");
+      lg.textContent = q.title;
+      fs.append(lg);
+      const opts = document.createElement("div");
+      opts.className = "opts";
+      q.options.forEach(o => {
+        const lab = document.createElement("label");
+        lab.className = "opt";
+        const inp = document.createElement("input");
+        inp.type = "radio";
+        inp.name = id;
+        inp.value = o;
+        const span = document.createElement("span");
+        span.textContent = o;
+        lab.append(inp, span);
+        opts.append(lab);
+      });
+      const clear = document.createElement("button");
+      clear.type = "button";
+      clear.className = "clear";
+      clear.textContent = "Clear selection";
+      clear.hidden = true;
+      clear.addEventListener("click", () => {
+        fs.querySelectorAll("input").forEach(r => { r.checked = false; });
+        clear.hidden = true;
+      });
+      opts.addEventListener("change", () => { clear.hidden = false; });
+      fs.append(opts, clear);
+      formEl.append(fs);
+    } else {
+      const wrap = document.createElement("div");
+      wrap.className = "card";
+      const lab = document.createElement("label");
+      lab.htmlFor = id;
+      lab.textContent = q.title;
+      const field = q.type === "long" ? document.createElement("textarea") : document.createElement("input");
+      if (q.type !== "long") field.type = q.inputType || "text";
+      if (q.autocomplete) field.autocomplete = q.autocomplete;
+      field.id = id;
+      field.placeholder = "Your answer";
+      wrap.append(lab, field);
+      formEl.append(wrap);
     }
   });
 
-  // Already sent from this phone or browser? Show the confirmation instead.
-  const already = readSent();
-  if (already && already.value) lockAsSent(already.value);
+  // ---- Submit ----
+  const submitBtn = document.getElementById("submit");
+  const done = document.getElementById("done");
 
-  /* ================= SNOW ================= */
-  const canvas = document.getElementById("snow");
+  function collect() {
+    const body = new URLSearchParams();
+    FORM.questions.forEach((q, i) => {
+      let val = "";
+      if (q.type === "choice") {
+        const r = formEl.querySelector(`input[name="q${i}"]:checked`);
+        val = r ? r.value : "";
+      } else {
+        val = document.getElementById("q" + i).value.trim();
+      }
+      if (val && q.entry) body.append(q.entry, val);
+    });
+    return body;
+  }
+
+  function lock() {
+    formEl.querySelectorAll("input, textarea, button").forEach(el => { el.disabled = true; });
+    submitBtn.hidden = true;
+    done.textContent = FORM.confirmation;
+  }
+
+  function readSent() { try { return localStorage.getItem(STORE_KEY); } catch (e) { return null; } }
+  function saveSent() { try { localStorage.setItem(STORE_KEY, String(Date.now())); } catch (e) {} }
+
+  submitBtn.addEventListener("click", async () => {
+    const body = collect();
+    if ([...body.keys()].length === 0 && connected) {
+      done.textContent = "Fill something in first!";
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    try {
+      if (connected) {
+        await fetch(`https://docs.google.com/forms/d/e/${FORM.id}/formResponse`, {
+          method: "POST",
+          mode: "no-cors",
+          body
+        });
+      }
+      saveSent();
+      lock();
+      burst();
+    } catch (err) {
+      console.warn("Send failed", err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit";
+      done.textContent = "That didn’t go through. Check your connection and try again.";
+    }
+  });
+
+  if (readSent()) lock();
+
+  /* ================= LEAVES ================= */
+  const canvas = document.getElementById("leaves");
   const ctx = canvas.getContext("2d");
+  const fg = document.getElementById("burst");
+  const ctx2 = fg.getContext("2d");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let flakes = [];
-  let w = 0, h = 0, dpr = 1;
+  const COLORS = ["#e2622a", "#f08b25", "#f6b23c", "#c9432a", "#d97a1e", "#b8432c"];
+  const maple = new Path2D("M0,-10 L2,-5 L6,-7 L5,-2 L10,-1 L6,2 L7,5 L2,4 L1,9 L0,7 L-1,9 L-2,4 L-7,5 L-6,2 L-10,-1 L-5,-2 L-6,-7 L-2,-5 Z");
+  const oval = new Path2D("M0,-10 C 6,-5 6,5 0,10 C -6,5 -6,-5 0,-10 Z");
+  let w = 0, h = 0;
+  let falling = [];
+  let flying = [];
 
-  function makeFlake(startAnywhere) {
-    const r = Math.random() * 2.6 + 0.8;
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+  function makeFaller(anywhere) {
     return {
-      x: Math.random() * w,
-      y: startAnywhere ? Math.random() * h : -10,
-      r,
-      speed: r * 0.35 + Math.random() * 0.4,
-      drift: Math.random() * Math.PI * 2,
-      sway: Math.random() * 0.6 + 0.2,
-      alpha: Math.random() * 0.5 + 0.45
+      x: rand(0, w), y: anywhere ? rand(-h * 0.2, h) : rand(-60, -20),
+      s: rand(0.7, 1.4), vy: rand(0.35, 0.9), sway: rand(0.4, 1.2), phase: rand(0, 6.28),
+      rot: rand(0, 6.28), vr: rand(-0.02, 0.02), color: pick(COLORS),
+      shape: Math.random() < 0.55 ? maple : oval, alpha: rand(0.55, 0.9)
     };
   }
 
+  function burst() {
+    if (reduceMotion) return;
+    const g = 0.28;
+    const n = Math.round(Math.min(220, Math.max(120, (w * h) / 2600)));
+    const reach = Math.sqrt(2 * g * h);          // speed needed to reach the top
+    for (let i = 0; i < n; i++) {
+      const origin = i % 3;                       // bottom-left, bottom-right, bottom-center
+      const x0 = origin === 0 ? rand(-20, w * 0.12) : origin === 1 ? rand(w * 0.88, w + 20) : rand(w * 0.4, w * 0.6);
+      const vy = -reach * rand(0.6, 1.05);
+      const tApex = -vy / g;
+      const targetX = rand(-0.05, 1.05) * w;      // spread across the whole width
+      flying.push({
+        x: x0, y: h + 20,
+        vx: (targetX - x0) / tApex, vy,
+        s: rand(1.6, 3.2), rot: rand(0, 6.28), vr: rand(-0.18, 0.18),
+        color: pick(COLORS), shape: Math.random() < 0.6 ? maple : oval,
+        alpha: 1, life: 0, delay: Math.floor(rand(0, 36)), phase: rand(0, 6.28)
+      });
+    }
+  }
+
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    for (const c of [canvas, fg]) { c.width = w * dpr; c.height = h * dpr; }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const count = Math.round(Math.min(160, (w * h) / 9000));
-    flakes = Array.from({ length: count }, () => makeFlake(true));
+    ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round(Math.min(50, (w * h) / 16000));
+    falling = Array.from({ length: count }, () => makeFaller(true));
     if (reduceMotion) draw();
+  }
+
+  function drawLeaf(l, c) {
+    const ctx = c;
+    ctx.save();
+    ctx.translate(l.x, l.y);
+    ctx.rotate(l.rot);
+    ctx.scale(l.s, l.s);
+    ctx.globalAlpha = l.alpha;
+    ctx.fillStyle = l.color;
+    ctx.fill(l.shape);
+    ctx.strokeStyle = "rgba(90, 30, 10, 0.35)";
+    ctx.lineWidth = 0.9;
+    ctx.beginPath(); ctx.moveTo(0, -7); ctx.lineTo(0, 12); ctx.stroke();
+    ctx.restore();
   }
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    for (const f of flakes) {
-      ctx.beginPath();
-      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
-      ctx.fill();
-    }
+    ctx2.clearRect(0, 0, w, h);
+    falling.forEach(l => drawLeaf(l, ctx));
+    flying.forEach(l => { if (l.delay <= 0) drawLeaf(l, ctx2); });
   }
 
   function tick() {
-    for (const f of flakes) {
-      f.drift += 0.01;
-      f.y += f.speed;
-      f.x += Math.sin(f.drift) * f.sway;
-      if (f.y > h + 10) Object.assign(f, makeFlake(false));
-      if (f.x > w + 10) f.x = -10;
-      if (f.x < -10) f.x = w + 10;
+    for (const l of falling) {
+      l.phase += 0.015;
+      l.y += l.vy;
+      l.x += Math.sin(l.phase) * l.sway;
+      l.rot += l.vr + Math.sin(l.phase) * 0.01;
+      if (l.y > h + 30) Object.assign(l, makeFaller(false));
     }
+    for (const l of flying) {
+      if (l.delay > 0) { l.delay--; continue; }
+      l.life++;
+      l.vy += 0.28;
+      if (l.vy > 1.5) {                           // drifting down like a real leaf
+        l.vy = 1.5;
+        l.phase += 0.04;
+        l.vx = l.vx * 0.95 + Math.sin(l.phase) * 0.9 * 0.05;
+        l.x += Math.sin(l.phase) * 1.1;
+        l.vr *= 0.98;
+        l.rot += Math.sin(l.phase) * 0.02;
+      }
+      l.x += l.vx; l.y += l.vy; l.rot += l.vr;
+      if (l.life > 380) l.alpha -= 0.006;
+    }
+    flying = flying.filter(l => l.alpha > 0 && l.y < h + 80);
     draw();
     requestAnimationFrame(tick);
   }
 
   window.addEventListener("resize", resize);
   resize();
-  if (!reduceMotion) requestAnimationFrame(tick);
+  if (!reduceMotion) {
+    burst();
+    requestAnimationFrame(tick);
+  }
 </script>
 </body>
 </html>
