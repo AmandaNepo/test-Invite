@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wanna pull up?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  /* ======== SETUP: the only part you'd ever edit ======== */
+  /* (Form settings live in the <script> at the bottom.)     */
+
+  :root {
+    color-scheme: light;
+    --sky-top: #2b5fe0;
+    --sky-bottom: #0f2f8f;
+    --ink: #ffffff;
+    --ink-soft: rgba(255, 255, 255, 0.78);
+    --chip: rgba(255, 255, 255, 0.14);
+    --chip-hover: rgba(255, 255, 255, 0.24);
+    --chip-line: rgba(255, 255, 255, 0.45);
+    --picked-bg: #ffffff;
+    --picked-ink: #0f2f8f;
+    --banner-bg: rgba(255, 255, 255, 0.92);
+    --banner-ink: #0f2f8f;
+    --font: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --sky-top: #1d47b8;
+      --sky-bottom: #081d5e;
+      --picked-ink: #081d5e;
+      --banner-ink: #081d5e;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --sky-top: #1d47b8;
+    --sky-bottom: #081d5e;
+    --picked-ink: #081d5e;
+    --banner-ink: #081d5e;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  :root {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--sky-bottom);
+    background-image: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  #snow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.25rem;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 30rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    font-variation-settings: "opsz" 96;
+    text-wrap: balance;
+  }
+
+  .sub {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .choices {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .choice {
+    font: inherit;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--ink);
+    background: var(--chip);
+    border: 1.5px solid var(--chip-line);
+    border-radius: 999px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .choice:hover { background: var(--chip-hover); }
+  .choice:active { transform: scale(0.98); }
+  .choice:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .choice[aria-pressed="true"] {
+    background: var(--picked-bg);
+    color: var(--picked-ink);
+    border-color: var(--picked-bg);
+  }
+  .choice:disabled { cursor: default; }
+  .choice:disabled:not([aria-pressed="true"]) { opacity: 0.45; }
+
+  .done {
+    margin-top: 2rem;
+    min-height: 3.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .done small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .linklike {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .linklike:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .banner {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 2;
+    background: var(--banner-bg);
+    color: var(--banner-ink);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    text-align: center;
+  }
+  .banner[hidden] { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .choice { transition: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="snow" aria-hidden="true"></canvas>
+
+<main>
+  <div class="card">
+    <h1>yoooo wanna pull up?</h1>
+    <p class="sub">Tap one. We’ll see you there (or we won’t).</p>
+
+    <div class="choices" role="group" aria-label="RSVP">
+      <button class="choice" type="button" data-value="Yes" aria-pressed="false">Yes, I’m in</button>
+      <button class="choice" type="button" data-value="Maybe" aria-pressed="false">Maybe</button>
+      <button class="choice" type="button" data-value="No" aria-pressed="false">Can’t make it</button>
+    </div>
+
+    <p class="done" id="done" aria-live="polite"></p>
+  </div>
+</main>
+
+<p class="banner" id="banner" hidden>Preview: RSVPs aren’t connected to the Google Form yet.</p>
+
+<script>
+  /* ================= FORM SETTINGS ================= */
+  // Your Google Form's ID (the long part of the form link).
+  const FORM_ID = "1FAIpQLSdTyzunwzJyNV4TDzI_RuV8m1khjyByz2mb-asYna0mLQJWwg";
+  // The question's field ID, like "entry.123456789".
+  // Find it with Google Forms ⋮ menu → "Get pre-filled link".
+  const ENTRY_ID = "entry.1019363191";
+  /* ================================================== */
+
+  const connected = ENTRY_ID.startsWith("entry.");
+  const banner = document.getElementById("banner");
+  if (!connected) banner.hidden = false;
+
+  const buttons = Array.from(document.querySelectorAll(".choice"));
+  const done = document.getElementById("done");
+
+  const messages = {
+    Yes: ["Yesss. You’re on the list.", "See you there."],
+    Maybe: ["Noted as a maybe.", "Come if you can!"],
+    No: ["Got it, we’ll miss you.", "Next time."]
+  };
+
+  async function sendToForm(value) {
+    if (!connected) return;
+    const body = new URLSearchParams();
+    body.append(ENTRY_ID, value);
+    try {
+      // Google doesn't let other sites read its reply ("no-cors"),
+      // so we send the answer and trust it landed, like a normal form.
+      await fetch(`https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`, {
+        method: "POST",
+        mode: "no-cors",
+        body
+      });
+    } catch (err) {
+      console.warn("RSVP send failed", err);
+    }
+  }
+
+  function showDone(value) {
+    const [line, note] = messages[value];
+    done.textContent = "";
+    done.append(line);
+    const small = document.createElement("small");
+    small.append(note + " ");
+    const change = document.createElement("button");
+    change.type = "button";
+    change.className = "linklike";
+    change.textContent = "Change answer";
+    change.addEventListener("click", reset);
+    small.append(change);
+    done.append(small);
+  }
+
+  function reset() {
+    buttons.forEach(b => { b.disabled = false; b.setAttribute("aria-pressed", "false"); });
+    done.textContent = "";
+    buttons[0].focus();
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const value = btn.dataset.value;
+      buttons.forEach(b => {
+        b.setAttribute("aria-pressed", String(b === btn));
+        b.disabled = true;
+      });
+      showDone(value);
+      await sendToForm(value);
+    });
+  });
+
+  /* ================= SNOW ================= */
+  const canvas = document.getElementById("snow");
+  const ctx = canvas.getContext("2d");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let flakes = [];
+  let w = 0, h = 0, dpr = 1;
+
+  function makeFlake(startAnywhere) {
+    const r = Math.random() * 2.6 + 0.8;
+    return {
+      x: Math.random() * w,
+      y: startAnywhere ? Math.random() * h : -10,
+      r,
+      speed: r * 0.35 + Math.random() * 0.4,
+      drift: Math.random() * Math.PI * 2,
+      sway: Math.random() * 0.6 + 0.2,
+      alpha: Math.random() * 0.5 + 0.45
+    };
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round(Math.min(160, (w * h) / 9000));
+    flakes = Array.from({ length: count }, () => makeFlake(true));
+    if (reduceMotion) draw();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (const f of flakes) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function tick() {
+    for (const f of flakes) {
+      f.drift += 0.01;
+      f.y += f.speed;
+      f.x += Math.sin(f.drift) * f.sway;
+      if (f.y > h + 10) Object.assign(f, makeFlake(false));
+      if (f.x > w + 10) f.x = -10;
+      if (f.x < -10) f.x = w + 10;
+    }
+    draw();
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+  if (!reduceMotion) requestAnimationFrame(tick);
+</script>
+</body>
+</html>
