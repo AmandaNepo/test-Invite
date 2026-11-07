@@ -22,6 +22,8 @@
     --chip-line: rgba(255, 255, 255, 0.45);
     --picked-bg: #ffffff;
     --picked-ink: #0f2f8f;
+    --send-bg: #ffd84d;
+    --send-ink: #0f2f8f;
     --banner-bg: rgba(255, 255, 255, 0.92);
     --banner-ink: #0f2f8f;
     --font: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -126,6 +128,50 @@
     border-color: var(--picked-bg);
   }
   .choice:disabled { cursor: default; }
+
+  .name {
+    margin-top: 2.5rem;
+    text-align: left;
+  }
+  .name label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .name input {
+    width: 100%;
+    font: inherit;
+    font-size: 1.125rem;
+    color: var(--ink);
+    background: var(--chip);
+    border: 1.5px solid var(--chip-line);
+    border-radius: 0.875rem;
+    padding: 0.875rem 1rem;
+  }
+  .name input::placeholder { color: var(--ink-soft); }
+  .name input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .name[hidden] { display: none; }
+  .name + .choices { margin-top: 1.25rem; }
+
+  .send {
+    margin-top: 1.5rem;
+    width: 100%;
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--send-ink);
+    background: var(--send-bg);
+    border: 0;
+    border-radius: 999px;
+    padding: 1.05rem 1.5rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .send:active { transform: scale(0.98); }
+  .send:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .send:disabled { opacity: 0.35; cursor: default; }
+  .send[hidden] { display: none; }
   .choice:disabled:not([aria-pressed="true"]) { opacity: 0.45; }
 
   .done {
@@ -173,7 +219,7 @@
   .banner[hidden] { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .choice { transition: none; }
+    .choice, .send { transition: none; }
   }
 </style>
 </head>
@@ -183,7 +229,12 @@
 <main>
   <div class="card">
     <h1>yoooo wanna pull up?</h1>
-    <p class="sub">Tap one. We’ll see you there (or we won’t).</p>
+    <p class="sub">Pick one, then send your RSVP.</p>
+
+    <div class="name" id="nameWrap" hidden>
+      <label for="name">Your name</label>
+      <input id="name" type="text" autocomplete="name" placeholder="So we know who’s coming">
+    </div>
 
     <div class="choices" role="group" aria-label="RSVP">
       <button class="choice" type="button" data-value="Yes" aria-pressed="false">Yes, I’m in</button>
@@ -191,6 +242,7 @@
       <button class="choice" type="button" data-value="No" aria-pressed="false">Can’t make it</button>
     </div>
 
+    <button class="send" id="send" type="button" disabled>Send RSVP</button>
     <p class="done" id="done" aria-live="polite"></p>
   </div>
 </main>
@@ -201,17 +253,25 @@
   /* ================= FORM SETTINGS ================= */
   // Your Google Form's ID (the long part of the form link).
   const FORM_ID = "1FAIpQLSdTyzunwzJyNV4TDzI_RuV8m1khjyByz2mb-asYna0mLQJWwg";
-  // The question's field ID, like "entry.123456789".
-  // Find it with Google Forms ⋮ menu → "Get pre-filled link".
+  // The Yes/No/Maybe question's field ID.
   const ENTRY_ID = "entry.1019363191";
+  // Optional: a "Your name" question's field ID. Leave "" to hide the name box.
+  const NAME_ENTRY_ID = "";
   /* ================================================== */
 
   const connected = ENTRY_ID.startsWith("entry.");
+  const askName = NAME_ENTRY_ID.startsWith("entry.");
+  const STORE_KEY = "rsvp-sent-" + FORM_ID;
+
   const banner = document.getElementById("banner");
   if (!connected) banner.hidden = false;
 
   const buttons = Array.from(document.querySelectorAll(".choice"));
+  const send = document.getElementById("send");
   const done = document.getElementById("done");
+  const nameWrap = document.getElementById("nameWrap");
+  const nameInput = document.getElementById("name");
+  if (askName) nameWrap.hidden = false;
 
   const messages = {
     Yes: ["Yesss. You’re on the list.", "See you there."],
@@ -219,55 +279,78 @@
     No: ["Got it, we’ll miss you.", "Next time."]
   };
 
-  async function sendToForm(value) {
+  let picked = null;
+
+  function readSent() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; }
+  }
+  function saveSent(value) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ value, at: Date.now() })); } catch (e) {}
+  }
+
+  function updateSend() {
+    const nameOk = !askName || nameInput.value.trim().length > 0;
+    send.disabled = !(picked && nameOk);
+  }
+
+  // Pick and re-pick freely; nothing is sent until "Send RSVP".
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      picked = btn.dataset.value;
+      buttons.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+      updateSend();
+    });
+  });
+  nameInput.addEventListener("input", updateSend);
+
+  async function sendToForm(value, name) {
     if (!connected) return;
     const body = new URLSearchParams();
     body.append(ENTRY_ID, value);
-    try {
-      // Google doesn't let other sites read its reply ("no-cors"),
-      // so we send the answer and trust it landed, like a normal form.
-      await fetch(`https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`, {
-        method: "POST",
-        mode: "no-cors",
-        body
-      });
-    } catch (err) {
-      console.warn("RSVP send failed", err);
-    }
+    if (askName) body.append(NAME_ENTRY_ID, name);
+    // Google doesn't let other sites read its reply ("no-cors"),
+    // so we send the answer and trust it landed, like a normal form.
+    await fetch(`https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`, {
+      method: "POST",
+      mode: "no-cors",
+      body
+    });
   }
 
-  function showDone(value) {
-    const [line, note] = messages[value];
+  function lockAsSent(value) {
+    buttons.forEach(b => {
+      b.disabled = true;
+      b.setAttribute("aria-pressed", String(b.dataset.value === value));
+    });
+    nameInput.disabled = true;
+    send.hidden = true;
+    const [line, note] = messages[value] || ["RSVP sent.", ""];
     done.textContent = "";
     done.append(line);
     const small = document.createElement("small");
-    small.append(note + " ");
-    const change = document.createElement("button");
-    change.type = "button";
-    change.className = "linklike";
-    change.textContent = "Change answer";
-    change.addEventListener("click", reset);
-    small.append(change);
+    small.textContent = note + " Need to change it? Just text us.";
     done.append(small);
   }
 
-  function reset() {
-    buttons.forEach(b => { b.disabled = false; b.setAttribute("aria-pressed", "false"); });
-    done.textContent = "";
-    buttons[0].focus();
-  }
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const value = btn.dataset.value;
-      buttons.forEach(b => {
-        b.setAttribute("aria-pressed", String(b === btn));
-        b.disabled = true;
-      });
-      showDone(value);
-      await sendToForm(value);
-    });
+  send.addEventListener("click", async () => {
+    if (!picked || send.disabled) return;
+    send.disabled = true;
+    send.textContent = "Sending…";
+    try {
+      await sendToForm(picked, nameInput.value.trim());
+      saveSent(picked);
+      lockAsSent(picked);
+    } catch (err) {
+      console.warn("RSVP send failed", err);
+      send.textContent = "Send RSVP";
+      send.disabled = false;
+      done.textContent = "That didn’t go through. Check your connection and tap Send RSVP again.";
+    }
   });
+
+  // Already sent from this phone or browser? Show the confirmation instead.
+  const already = readSent();
+  if (already && already.value) lockAsSent(already.value);
 
   /* ================= SNOW ================= */
   const canvas = document.getElementById("snow");
