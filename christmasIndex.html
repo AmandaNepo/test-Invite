@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Christmas Escape</title>
+<!-- Link preview. If the repo name changes, update "test-Invite" below. -->
+<meta name="description" content="Which day are you pulling up? Tap to RSVP!">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Christmas Escape">
+<meta property="og:description" content="Which day are you pulling up? Tap to RSVP!">
+<meta property="og:url" content="https://amandanepo.github.io/test-Invite/christmasIndex.html">
+<meta property="og:image" content="https://amandanepo.github.io/test-Invite/christmas-preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --card: rgba(255, 248, 238, 0.9);
+    --card-line: rgba(160, 40, 30, 0.28);
+    --ink: #3d1a12;
+    --ink-soft: #7d4a3a;
+    --accent: #b8262b;
+    --accent-ink: #fff8ee;
+    --accent-shadow: #6e1214;
+    --pill: rgba(250, 230, 210, 0.95);
+    --pill-line: #e2b48f;
+    --error: #b3261e;
+    --title-font: "Mountains of Christmas", "Georgia", serif;
+    --body-font: "Nunito", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --card: rgba(48, 22, 16, 0.9);
+      --card-line: rgba(240, 170, 120, 0.3);
+      --ink: #fbeadb;
+      --ink-soft: #e0b89c;
+      --accent: #d9393d;
+      --accent-ink: #fff8ee;
+      --pill: rgba(80, 38, 28, 0.95);
+      --pill-line: #8a5038;
+      --error: #ff9a8f;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --card: rgba(48, 22, 16, 0.9);
+    --card-line: rgba(240, 170, 120, 0.3);
+    --ink: #fbeadb;
+    --ink-soft: #e0b89c;
+    --accent: #d9393d;
+    --accent-ink: #fff8ee;
+    --pill: rgba(80, 38, 28, 0.95);
+    --pill-line: #8a5038;
+    --error: #ff9a8f;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  :root {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { background: #a8683c; }
+  body {
+    position: relative;
+    min-height: 100vh;
+    font-family: var(--body-font);
+    color: var(--ink);
+    background: #a8683c;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* ===== Cozy workshop: runs the full page height ===== */
+  .scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(90deg, rgba(70, 30, 12, 0.22) 0 2px, transparent 2px 58px),
+      repeating-linear-gradient(90deg, transparent 0 20px, rgba(255, 220, 170, 0.06) 20px 40px),
+      linear-gradient(180deg, #a8683c, #b97a4a 40%, #a46638);
+  }
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 200, 120, 0.45), rgba(255, 200, 120, 0) 70%);
+    pointer-events: none;
+  }
+  .beam { position: absolute; top: 0; left: 0; right: 0; height: 26px; background: #6b3418; box-shadow: 0 4px 0 #4e240f; }
+  .garland {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 70px;
+  }
+  .bulb { animation: twinkle 1.8s ease-in-out infinite; }
+  .bulb:nth-of-type(2n) { animation-delay: -0.6s; }
+  .bulb:nth-of-type(3n) { animation-delay: -1.2s; }
+  @keyframes twinkle { 50% { opacity: 0.35; } }
+
+  .shelf {
+    position: absolute;
+    height: 12px;
+    background: #8a4a26;
+    box-shadow: 0 5px 0 #5e2f16;
+    border-radius: 3px;
+  }
+  .prop {
+    position: absolute;
+    transform: translateY(-100%);
+  }
+  .prop svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120px;
+    background:
+      repeating-linear-gradient(100deg, rgba(90, 45, 20, 0.25) 0 2px, transparent 2px 70px),
+      linear-gradient(180deg, #d9a66f, #c48e58);
+  }
+  .rug {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    width: min(80%, 520px);
+    height: 46px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: repeating-radial-gradient(ellipse, #b8262b 0 8px, #2f6b3a 8px 14px, #e9c46a 14px 18px);
+    opacity: 0.85;
+  }
+
+  /* ===== Elves ===== */
+  .walker {
+    position: absolute;
+    width: 46px;
+    animation: walk var(--dur, 14s) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  .walker svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .walker .flip { animation: face var(--dur, 14s) steps(1) infinite; animation-delay: var(--delay, 0s); transform-origin: center; }
+  .walker .bob { animation: bob 0.45s ease-in-out infinite; }
+  .walker .legA { animation: legs 0.45s ease-in-out infinite; transform-box: fill-box; transform-origin: top center; }
+  .walker .legB { animation: legs 0.45s ease-in-out infinite reverse; transform-box: fill-box; transform-origin: top center; }
+  @keyframes walk {
+    0% { left: var(--from); }
+    50% { left: var(--to); }
+    100% { left: var(--from); }
+  }
+  @keyframes face { 0% { transform: scaleX(1); } 50% { transform: scaleX(-1); } }
+  @keyframes bob { 50% { transform: translateY(-2px); } }
+  @keyframes legs { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(-18deg); } }
+  .hammer-arm { animation: hammer 0.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 10% 10%; }
+  @keyframes hammer { 0%, 100% { transform: rotate(-40deg); } 45% { transform: rotate(25deg); } }
+  .spark { animation: spark 0.6s ease-out infinite; opacity: 0; }
+  @keyframes spark { 40% { opacity: 0; } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
+  .flame { animation: flicker 0.35s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: bottom center; }
+  @keyframes flicker { to { transform: scaleY(0.85) scaleX(1.06); } }
+  .wave { animation: wave 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 15% 90%; }
+  @keyframes wave { 50% { transform: rotate(-25deg); } }
+
+  #fallers, #burst {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #burst { z-index: 4; }
+
+  /* ===== Content ===== */
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 36rem;
+    margin: 0 auto;
+    padding: 5.5rem 1.25rem 240px;
+  }
+  .sign {
+    position: relative;
+    margin: 0 auto;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.6rem 1.6rem 0.8rem;
+    background: #b8262b;
+    border: 4px solid #e9c46a;
+    border-radius: 1rem;
+    box-shadow: 0 6px 0 #6e1214;
+  }
+  .sign h1 {
+    font-family: var(--title-font);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 12vw, 4.5rem);
+    line-height: 1;
+    color: #fff4e0;
+    text-align: center;
+    text-wrap: balance;
+    text-shadow: 0 3px 0 rgba(60, 10, 5, 0.45);
+  }
+  .card {
+    margin-top: 1rem;
+    background: var(--card);
+    border: 1.5px solid var(--card-line);
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.375rem 1.375rem;
+  }
+  .gate, #view-form, #view-bye { margin-top: 1.5rem; }
+  #view-form > form > .card:first-child { margin-top: 0; }
+  #view-form .actions { margin-top: 0; }
+  fieldset.card { min-width: 0; }
+  .card legend {
+    float: left;
+    width: 100%;
+    display: block;
+    font-weight: 800;
+    font-size: 1.125rem;
+    margin-bottom: 0.875rem;
+    padding: 0;
+  }
+  .card legend + * { clear: both; }
+  .card > label { display: block; font-weight: 800; font-size: 1.125rem; margin-bottom: 0.75rem; }
+  #pre .card:first-child { margin-top: 1.5rem; }
+  #pre .card + .card, #pre + .gate { margin-top: 1rem; }
+  .gate legend { text-align: center; font-size: 1.3rem; margin-bottom: 1rem; }
+  .req { color: var(--accent); }
+  .help { margin: -0.375rem 0 0.75rem; font-size: 0.95rem; color: var(--ink-soft); }
+  .error { margin-top: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--error); }
+  .error:empty { display: none; }
+  .card.invalid { border-color: var(--error); }
+
+  .gate-btns { display: grid; gap: 0.75rem; }
+  .gate-btn {
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.1875rem;
+    border-radius: 999px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    border: 2px solid var(--accent);
+    background: transparent;
+    color: var(--ink);
+    transition: transform 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .gate-btn.yes { background: var(--accent); color: var(--accent-ink); box-shadow: 0 4px 0 var(--accent-shadow); }
+  .gate-btn:active { transform: translateY(2px); }
+  .gate-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .gate-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .opt { position: relative; }
+  .opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .opt span {
+    display: inline-block;
+    font-weight: 600;
+    background: var(--pill);
+    border: 1.5px solid var(--pill-line);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .opt input:checked + span { background: #2f6b3a; border-color: #2f6b3a; color: #fff8ee; }
+  .opt input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt input:disabled + span { cursor: default; }
+  .clear {
+    margin-top: 0.625rem;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .clear[hidden] { display: none; }
+  .card input[type="text"]:focus-visible, .card textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .card input[type="text"], .card textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 1.0625rem;
+    color: var(--ink);
+    background: var(--pill);
+    border: 1.5px solid var(--pill-line);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.875rem;
+  }
+  .card textarea { min-height: 5.5rem; resize: vertical; }
+
+  .actions { margin-top: 1.25rem; }
+  .submit {
+    width: 100%;
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--accent-shadow);
+  }
+  .submit:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--accent-shadow); }
+  .submit:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .submit:disabled { opacity: 0.6; cursor: default; }
+  .submit[hidden] { display: none; }
+  .done {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.25rem;
+    background: var(--card);
+    border: 1.5px solid var(--card-line);
+    border-radius: 1rem;
+    padding: 0.875rem 1rem;
+  }
+  .done:empty { display: none; }
+  .bye { text-align: center; padding: 2rem 1.5rem; }
+  .bye h2 { font-family: var(--title-font); font-weight: 700; font-size: clamp(2.2rem, 10vw, 3.25rem); line-height: 1.05; }
+
+  .view[hidden], [hidden] { display: none !important; }
+  .reveal { animation: reveal 0.7s ease; }
+  @keyframes reveal { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+  @media (min-width: 900px) {
+    .prop, .walker { scale: 1.4; transform-origin: 50% 100%; }
+    .gate, #view-form, #view-bye { margin-top: 2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .walker, .walker *, .bulb, .hammer-arm, .spark, .flame, .wave, .reveal { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- walking elf: pieces animate via classes -->
+    <symbol id="elf-walk" viewBox="0 0 50 80" overflow="visible">
+      <g class="bob">
+        <rect class="legA" x="18" y="58" width="6" height="16" rx="2" fill="#2f6b3a"/>
+        <rect class="legB" x="26" y="58" width="6" height="16" rx="2" fill="#b8262b"/>
+        <path d="M13 60 L25 34 L37 60 Z" fill="#3f8a4a"/>
+        <path d="M13 60 L37 60 L36 64 L14 64 Z" fill="#e9c46a"/>
+        <rect x="20" y="44" width="10" height="3" fill="#7a3a1d"/>
+        <circle cx="25" cy="28" r="9" fill="#f6c9a3"/>
+        <path d="M15 28 L11 22 L17 25 Z M35 28 L39 22 L33 25 Z" fill="#f2b68a"/>
+        <circle cx="22" cy="28" r="1.2" fill="#3d1a12"/><circle cx="28" cy="28" r="1.2" fill="#3d1a12"/>
+        <path d="M22 32 Q25 34 28 32" stroke="#3d1a12" stroke-width="1" fill="none"/>
+        <path d="M15 23 Q25 -2 40 12 L36 14 Q28 8 35 22 Z" fill="#b8262b"/>
+        <rect x="14" y="20" width="22" height="5" rx="2.5" fill="#fff4e0"/>
+        <circle cx="39" cy="13" r="3" fill="#fff4e0"/>
+      </g>
+    </symbol>
+    <!-- elf carrying a present -->
+    <symbol id="elf-carry" viewBox="0 0 50 80" overflow="visible">
+      <use href="#elf-walk"/>
+      <g class="bob">
+        <rect x="26" y="38" width="18" height="16" fill="#2f6b3a"/>
+        <rect x="33" y="38" width="4" height="16" fill="#e9c46a"/>
+        <path d="M35 38 C 30 31, 27 36, 35 38 C 43 31, 40 36, 35 38" stroke="#e9c46a" stroke-width="2" fill="none"/>
+      </g>
+    </symbol>
+    <symbol id="tree" viewBox="0 0 120 170">
+      <rect x="52" y="140" width="16" height="18" fill="#7a3a1d"/>
+      <path d="M60 10 L20 70 L40 70 L12 112 L36 112 L6 146 L114 146 L84 112 L108 112 L80 70 L100 70 Z" fill="#2f6b3a"/>
+      <path d="M30 96 Q60 108 92 88 M24 130 Q60 140 100 122 M40 58 Q60 66 82 52" stroke="#e9c46a" stroke-width="3" fill="none"/>
+      <circle cx="42" cy="80" r="5" fill="#b8262b"/><circle cx="78" cy="96" r="5" fill="#e9c46a"/>
+      <circle cx="56" cy="118" r="5" fill="#b8262b"/><circle cx="88" cy="132" r="5" fill="#fff4e0"/>
+      <circle cx="30" cy="136" r="5" fill="#e9c46a"/><circle cx="64" cy="46" r="4" fill="#fff4e0"/>
+      <path d="M60 0 L64 9 L73 9 L66 15 L69 24 L60 18 L51 24 L54 15 L47 9 L56 9 Z" fill="#f2c14e"/>
+      <rect x="14" y="148" width="28" height="22" fill="#b8262b"/><rect x="26" y="148" width="4" height="22" fill="#e9c46a"/>
+      <rect x="80" y="152" width="26" height="18" fill="#e9c46a"/><rect x="91" y="152" width="4" height="18" fill="#2f6b3a"/>
+    </symbol>
+    <symbol id="fireplace" viewBox="0 0 160 140">
+      <rect x="0" y="20" width="160" height="120" fill="#a64a2c"/>
+      <path d="M0 40 H160 M0 60 H160 M0 80 H160 M0 100 H160 M0 120 H160" stroke="#7e3420" stroke-width="2"/>
+      <rect x="-8" y="10" width="176" height="16" rx="3" fill="#6b3418"/>
+      <path d="M36 140 V84 Q80 50 124 84 V140 Z" fill="#2a120a"/>
+      <rect x="50" y="124" width="60" height="8" rx="4" fill="#6b3418"/>
+      <g class="flame"><path d="M80 126 C 62 112, 70 96, 80 84 C 90 96, 98 112, 80 126 Z" fill="#f08b25"/><path d="M80 126 C 72 116, 76 106, 80 98 C 84 106, 88 116, 80 126 Z" fill="#f6d04d"/></g>
+      <g transform="translate(22 26)"><path d="M0 0 H14 V24 L24 30 L18 38 L4 30 L0 26 Z" fill="#b8262b"/><rect x="-1" y="0" width="16" height="6" fill="#fff4e0"/></g>
+      <g transform="translate(122 26)"><path d="M0 0 H14 V24 L24 30 L18 38 L4 30 L0 26 Z" fill="#2f6b3a"/><rect x="-1" y="0" width="16" height="6" fill="#fff4e0"/></g>
+    </symbol>
+    <symbol id="window" viewBox="0 0 110 120">
+      <rect x="0" y="0" width="110" height="120" rx="8" fill="#6b3418"/>
+      <rect x="8" y="8" width="94" height="104" rx="4" fill="#2c3f6b"/>
+      <path d="M8 92 Q40 80 60 92 T102 88 V112 H8 Z" fill="#f4f1ec"/>
+      <circle cx="30" cy="30" r="2" fill="#fff"/><circle cx="70" cy="22" r="2" fill="#fff"/><circle cx="84" cy="52" r="2" fill="#fff"/><circle cx="46" cy="60" r="2" fill="#fff"/><circle cx="22" cy="72" r="2" fill="#fff"/>
+      <path d="M55 8 V112 M8 60 H102" stroke="#6b3418" stroke-width="6"/>
+      <path d="M-6 118 H116" stroke="#6b3418" stroke-width="8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="toys" viewBox="0 0 140 60">
+      <rect x="0" y="22" width="34" height="38" fill="#b8262b"/><rect x="15" y="22" width="4" height="38" fill="#e9c46a"/>
+      <g transform="translate(46 10)"><rect x="0" y="20" width="36" height="30" rx="4" fill="#2f6b3a"/><circle cx="18" cy="12" r="12" fill="#e9c46a"/><circle cx="14" cy="10" r="2" fill="#3d1a12"/><circle cx="22" cy="10" r="2" fill="#3d1a12"/></g>
+      <g transform="translate(94 4)"><rect x="6" y="0" width="8" height="56" rx="4" fill="#fff4e0"/><path d="M6 8 L14 4 M6 20 L14 16 M6 32 L14 28 M6 44 L14 40" stroke="#b8262b" stroke-width="3"/><path d="M14 4 Q30 0 30 16" stroke="#fff4e0" stroke-width="8" fill="none" stroke-linecap="round"/></g>
+    </symbol>
+    <!-- elf hammering at a bench -->
+    <symbol id="bench" viewBox="0 0 150 100" overflow="visible">
+      <rect x="40" y="62" width="110" height="10" fill="#8a4a26"/>
+      <rect x="46" y="72" width="8" height="28" fill="#6b3418"/><rect x="136" y="72" width="8" height="28" fill="#6b3418"/>
+      <rect x="92" y="48" width="30" height="14" rx="2" fill="#b8262b"/><circle cx="98" cy="62" r="4" fill="#3d1a12"/><circle cx="116" cy="62" r="4" fill="#3d1a12"/>
+      <g class="spark"><path d="M90 46 L84 40 M92 42 L92 34 M96 46 L102 40" stroke="#f6d04d" stroke-width="2.5" stroke-linecap="round"/></g>
+      <g transform="translate(20 20)">
+        <rect x="18" y="58" width="6" height="22" rx="2" fill="#2f6b3a"/><rect x="26" y="58" width="6" height="22" rx="2" fill="#b8262b"/>
+        <path d="M13 60 L25 34 L37 60 Z" fill="#3f8a4a"/>
+        <path d="M13 60 L37 60 L36 64 L14 64 Z" fill="#e9c46a"/>
+        <circle cx="25" cy="28" r="9" fill="#f6c9a3"/>
+        <path d="M35 28 L39 22 L33 25 Z" fill="#f2b68a"/>
+        <circle cx="28" cy="28" r="1.2" fill="#3d1a12"/>
+        <path d="M15 23 Q25 -2 40 12 L36 14 Q28 8 35 22 Z" fill="#b8262b"/>
+        <rect x="14" y="20" width="22" height="5" rx="2.5" fill="#fff4e0"/>
+        <g class="hammer-arm">
+          <rect x="28" y="38" width="22" height="5" rx="2.5" fill="#3f8a4a"/>
+          <rect x="48" y="34" width="4" height="14" fill="#7a3a1d"/>
+          <rect x="44" y="28" width="12" height="8" rx="1" fill="#6d6d6d"/>
+        </g>
+      </g>
+    </symbol>
+    <!-- elf on a ladder waving -->
+    <symbol id="ladder" viewBox="0 0 60 130" overflow="visible">
+      <path d="M8 130 L18 30 M52 130 L42 30" stroke="#8a4a26" stroke-width="5"/>
+      <path d="M16 50 H44 M14 70 H46 M12 90 H48 M10 110 H50" stroke="#8a4a26" stroke-width="4"/>
+      <g transform="translate(5 -10)">
+        <rect x="18" y="58" width="6" height="14" rx="2" fill="#2f6b3a"/><rect x="26" y="58" width="6" height="14" rx="2" fill="#b8262b"/>
+        <path d="M13 60 L25 34 L37 60 Z" fill="#3f8a4a"/>
+        <path d="M13 60 L37 60 L36 64 L14 64 Z" fill="#e9c46a"/>
+        <circle cx="25" cy="28" r="9" fill="#f6c9a3"/>
+        <path d="M15 28 L11 22 L17 25 Z M35 28 L39 22 L33 25 Z" fill="#f2b68a"/>
+        <circle cx="22" cy="28" r="1.2" fill="#3d1a12"/><circle cx="28" cy="28" r="1.2" fill="#3d1a12"/>
+        <path d="M22 31 Q25 34 28 31" stroke="#3d1a12" stroke-width="1" fill="none"/>
+        <path d="M15 23 Q25 -2 40 12 L36 14 Q28 8 35 22 Z" fill="#2f6b3a"/>
+        <rect x="14" y="20" width="22" height="5" rx="2.5" fill="#fff4e0"/>
+        <rect class="wave" x="34" y="30" width="5" height="18" rx="2.5" fill="#3f8a4a"/>
+      </g>
+    </symbol>
+    <symbol id="wreath" viewBox="0 0 80 90">
+      <circle cx="40" cy="44" r="28" fill="none" stroke="#2f6b3a" stroke-width="14"/>
+      <circle cx="40" cy="44" r="28" fill="none" stroke="#3f8a4a" stroke-width="5" stroke-dasharray="6 8"/>
+      <circle cx="22" cy="30" r="3.5" fill="#b8262b"/><circle cx="60" cy="34" r="3.5" fill="#b8262b"/><circle cx="56" cy="64" r="3.5" fill="#b8262b"/><circle cx="24" cy="62" r="3.5" fill="#e9c46a"/>
+      <path d="M40 72 L30 88 M40 72 L50 88" stroke="#b8262b" stroke-width="5" stroke-linecap="round"/>
+      <path d="M40 72 C 26 62, 24 80, 40 72 C 56 62, 56 80, 40 72" fill="#b8262b"/>
+    </symbol>
+    <symbol id="cabinet" viewBox="0 0 110 170">
+      <rect x="0" y="0" width="110" height="170" fill="#6b3418"/>
+      <rect x="6" y="6" width="98" height="158" fill="#4e240f"/>
+      <path d="M6 58 H104 M6 112 H104" stroke="#8a4a26" stroke-width="6"/>
+      <rect x="14" y="30" width="20" height="25" fill="#b8262b"/><rect x="22" y="30" width="4" height="25" fill="#e9c46a"/>
+      <circle cx="54" cy="44" r="10" fill="#e9c46a"/><rect x="46" y="44" width="16" height="11" fill="#2f6b3a"/>
+      <rect x="70" y="36" width="26" height="19" rx="3" fill="#3f8a4a"/><circle cx="76" cy="55" r="4" fill="#1d1d1d"/><circle cx="90" cy="55" r="4" fill="#1d1d1d"/>
+      <path d="M18 108 L28 76 L38 108 Z" fill="#c0392b"/><circle cx="28" cy="74" r="4" fill="#fff4e0"/>
+      <rect x="48" y="86" width="22" height="22" fill="#e9c46a"/><rect x="57" y="86" width="4" height="22" fill="#b8262b"/>
+      <rect x="78" y="94" width="20" height="14" rx="2" fill="#b8262b"/><circle cx="82" cy="108" r="3.5" fill="#1d1d1d"/><circle cx="94" cy="108" r="3.5" fill="#1d1d1d"/>
+      <rect x="14" y="136" width="34" height="24" fill="#2f6b3a"/><rect x="29" y="136" width="4" height="24" fill="#e9c46a"/>
+      <rect x="58" y="140" width="38" height="20" fill="#b8262b"/><rect x="74" y="140" width="4" height="20" fill="#fff4e0"/>
+    </symbol>
+    <symbol id="sack" viewBox="0 0 120 90">
+      <path d="M20 90 C 0 60, 20 26, 50 22 L70 22 C 100 26, 120 60, 100 90 Z" fill="#b8262b"/>
+      <path d="M44 22 L50 8 L70 8 L76 22" fill="#9a1e22"/>
+      <rect x="40" y="14" width="40" height="7" rx="3" fill="#e9c46a"/>
+      <rect x="44" y="0" width="16" height="14" fill="#2f6b3a"/><rect x="62" y="2" width="14" height="12" fill="#e9c46a"/>
+      <path d="M36 50 Q60 40 84 50" stroke="#9a1e22" stroke-width="3" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="scene" aria-hidden="true">
+  <div class="glow" style="top:40px; left:-20%; width:80%; height:420px"></div>
+  <div class="glow" style="top:35%; right:-25%; width:90%; height:500px"></div>
+  <div class="glow" style="bottom:60px; left:-10%; width:70%; height:360px"></div>
+
+  <div class="beam"></div>
+  <svg class="garland" style="top:14px" viewBox="0 0 400 70" preserveAspectRatio="none">
+    <path d="M0 4 Q50 34 100 6 Q150 34 200 6 Q250 34 300 6 Q350 34 400 4" stroke="#2f6b3a" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <circle cx="100" cy="10" r="6" fill="#b8262b"/><circle cx="300" cy="10" r="6" fill="#b8262b"/>
+  </svg>
+  <!-- string lights -->
+  <svg class="garland" style="top:22px; height:90px" viewBox="0 0 400 90" preserveAspectRatio="none">
+    <path d="M0 10 Q66 70 133 14 Q200 70 266 14 Q333 70 400 10" stroke="#3a2010" stroke-width="1.5" fill="none"/>
+    <g fill="#ffe4a0">
+      <circle class="bulb" cx="16" cy="25" r="4.5"/><circle class="bulb" cx="40" cy="38" r="4.5"/><circle class="bulb" cx="66" cy="43" r="4.5"/>
+      <circle class="bulb" cx="92" cy="37" r="4.5"/><circle class="bulb" cx="116" cy="24" r="4.5"/><circle class="bulb" cx="150" cy="28" r="4.5"/>
+      <circle class="bulb" cx="175" cy="40" r="4.5"/><circle class="bulb" cx="200" cy="43" r="4.5"/><circle class="bulb" cx="225" cy="40" r="4.5"/>
+      <circle class="bulb" cx="250" cy="28" r="4.5"/><circle class="bulb" cx="284" cy="25" r="4.5"/><circle class="bulb" cx="310" cy="38" r="4.5"/>
+      <circle class="bulb" cx="336" cy="43" r="4.5"/><circle class="bulb" cx="362" cy="37" r="4.5"/><circle class="bulb" cx="386" cy="22" r="4.5"/>
+    </g>
+  </svg>
+
+  <!-- wreath beside the sign -->
+  <div class="prop" style="top:calc(300px + 32%); left:14px; width:56px"><svg viewBox="0 0 80 90"><use href="#wreath"/></svg></div>
+
+  <!-- left wall: shelf of toys with an elf walking on it -->
+  <div class="shelf" style="top:calc(300px + 44%); left:-6px; width:130px"></div>
+  <div class="prop" style="top:calc(300px + 44%); left:2px; width:100px"><svg viewBox="0 0 140 60"><use href="#toys"/></svg></div>
+  <div class="walker" style="top:calc(300px + 44% - 71px); --from:-12px; --to:80px; --dur:8s"><svg viewBox="0 0 50 80"><g class="flip"><use href="#elf-walk"/></g></svg></div>
+
+  <!-- right wall: tall toy shelf + elf on ladder -->
+  <div class="prop" style="top:calc(300px + 26%); right:-14px; width:96px"><svg viewBox="0 0 110 170"><use href="#cabinet"/></svg></div>
+  <div class="prop" style="top:calc(300px + 26%); right:72px; width:46px"><svg viewBox="0 0 60 130"><use href="#ladder"/></svg></div>
+
+  <!-- left lower: tree -->
+  <div class="prop" style="bottom:108px; transform:none; right:-26px; width:120px"><svg viewBox="0 0 120 170"><use href="#tree"/></svg></div>
+
+  <!-- floor -->
+  <div class="floor"><div class="rug"></div></div>
+  <div class="prop" style="bottom:108px; transform:none; left:-24px; width:100px"><svg viewBox="0 0 120 90"><use href="#sack"/></svg></div>
+  <div class="prop" style="bottom:28px; transform:none; left:calc(50% - 120px); width:170px"><svg viewBox="0 0 150 100"><use href="#bench"/></svg></div>
+  <div class="walker" style="bottom:30px; --from:-60px; --to:calc(100% + 10px); --dur:16s"><svg viewBox="0 0 50 80"><g class="flip"><use href="#elf-carry"/></g></svg></div>
+  <div class="walker" style="bottom:22px; --from:calc(100% + 10px); --to:-60px; --dur:19s; --delay:-7s"><svg viewBox="0 0 50 80"><g class="flip" style="transform:scaleX(-1)"><use href="#elf-walk"/></g></svg></div>
+</div>
+
+<canvas id="fallers" aria-hidden="true"></canvas>
+<canvas id="burst" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <header class="sign"><h1 id="title">Christmas Escape</h1></header>
+
+  <div id="pre"></div>
+  <div class="actions">
+    <button class="submit" id="submit" type="button">Submit</button>
+    <p class="done" id="done" aria-live="polite"></p>
+  </div>
+
+</div>
+
+<script>
+  /* ============================================================
+     ALL THE TEXT LIVES HERE. Match it to the Google Form.
+     Answer options must match the form's options exactly.
+     ============================================================ */
+  const FORM = {
+    id: "1FAIpQLScd6i9ItDS4oPnSArDTiATeQmzJPbzcllDOKCj5uzAxXBd9Pw",
+    title: "Christmas Escape",
+    questions: [
+      { type: "short", title: "Name (first and last)", entry: "entry.1428350631", required: true },
+      { type: "choice", title: "Which day do you plan to go?", entry: "entry.1570402101",
+        options: ["Saturday, Dec 5th", "Sunday, Dec 6th", "Monday, Dec 7th", "Tuesday, Dec 8th", "idk rn but im def pulling up"] }
+    ],
+    confirmation: "Your response has been recorded."
+  };
+  /* ============================================================ */
+
+  const $ = id => document.getElementById(id);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const submitBtn = $("submit"), done = $("done");
+  const pre = FORM.questions.map((q, i) => Object.assign({ idx: i }, q));
+  const STORE = "rsvp-v2-" + FORM.id;   // remembers this phone already submitted
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function readSent() { try { return localStorage.getItem(STORE); } catch (e) { return null; } }
+  function saveSent(v) { try { localStorage.setItem(STORE, v); } catch (e) {} }
+
+  // ---- Build the page ----
+  document.title = FORM.title;
+  $("title").textContent = FORM.title;
+
+  function renderInto(list, container) { list.forEach(q => {
+    const id = "q" + q.idx;
+    if (q.type === "choice" || q.type === "checkbox") {
+      const fs = el("fieldset", "card");
+      fs.dataset.q = q.idx;
+      const lg = el("legend", null, q.title);
+      fs.append(lg);
+      if (q.help) fs.append(el("p", "help", q.help));
+      const opts = el("div", "opts");
+      q.options.forEach(o => {
+        const lab = el("label", "opt");
+        const inp = document.createElement("input");
+        inp.type = q.type === "choice" ? "radio" : "checkbox";
+        inp.name = id;
+        inp.value = o;
+        lab.append(inp, el("span", null, o));
+        opts.append(lab);
+      });
+      fs.append(opts);
+      if (q.type === "choice") {
+        const clear = el("button", "clear", "Clear selection");
+        clear.type = "button";
+        clear.hidden = true;
+        clear.addEventListener("click", () => { fs.querySelectorAll("input").forEach(r => { r.checked = false; }); clear.hidden = true; });
+        opts.addEventListener("change", () => { clear.hidden = false; });
+        fs.append(clear);
+      }
+      fs.append(el("p", "error"));
+      container.append(fs);
+    } else {
+      const card = el("div", "card");
+      card.dataset.q = q.idx;
+      const lab = el("label", null, q.title);
+      lab.htmlFor = id;
+      const f = q.type === "long" ? document.createElement("textarea") : document.createElement("input");
+      if (q.type !== "long") f.type = "text";
+      if (/name/i.test(q.title)) f.autocomplete = "name";
+      f.id = id;
+      f.placeholder = "Your answer";
+      card.append(lab, f, el("p", "error"));
+      container.append(card);
+    }
+  }); }
+  renderInto(pre, $("pre"));
+
+  function valueOf(q) {
+    if (q.type === "choice") { const r = document.querySelector(`input[name="q${q.idx}"]:checked`); return r ? [r.value] : []; }
+    if (q.type === "checkbox") return Array.from(document.querySelectorAll(`input[name="q${q.idx}"]:checked`)).map(c => c.value);
+    const v = $("q" + q.idx).value.trim(); return v ? [v] : [];
+  }
+  function validate(list) {
+    let first = null;
+    list.forEach(q => {
+      const card = document.querySelector(`[data-q="${q.idx}"]`);
+      const missing = q.required && valueOf(q).length === 0;
+      card.classList.toggle("invalid", missing);
+      card.querySelector(".error").textContent = missing ? "This is a required question" : "";
+      if (missing && !first) first = card;
+    });
+    if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+    return !first;
+  }
+  function body() {
+    const b = new URLSearchParams();
+    pre.forEach(q => valueOf(q).forEach(v => b.append(q.entry, v)));
+    return b.toString();
+  }
+  async function send(b) {
+    // Google doesn't let other sites read its reply ("no-cors"),
+    // so we send the answers and trust they landed, like a normal form.
+    await fetch(`https://docs.google.com/forms/d/e/${FORM.id}/formResponse`, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: b
+    });
+  }
+
+  function lock() {
+    document.querySelectorAll("#pre input, #pre button").forEach(n => { n.disabled = true; });
+    submitBtn.hidden = true;
+    done.textContent = FORM.confirmation;
+  }
+
+  submitBtn.addEventListener("click", async () => {
+    if (!validate(pre)) return;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    try {
+      await send(body());
+      saveSent("yes");
+      lock();
+      burst();
+    } catch (e) {
+      console.warn("Send failed", e);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit";
+      done.textContent = "That didn’t go through. Check your connection and try again.";
+    }
+  });
+
+  if (readSent()) { $("pre").hidden = true; lock(); }
+
+  /* ================= ORNAMENTS + SNOW ================= */
+  const c1 = $("fallers"), x1 = c1.getContext("2d");
+  const c2 = $("burst"), x2 = c2.getContext("2d");
+  const COLORS = ["#b8262b", "#d93b3f", "#e9b23c", "#f2c14e", "#2f6b3a", "#3f8a4a", "#c0c4cc"];
+  let w = 0, h = 0, snow = [], balls = [];
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+
+  function makeFlake(any) {
+    const r = rand(1, 3.2);
+    return { x: rand(0, w), y: any ? rand(0, h) : -6, r, vy: r * 0.3 + rand(0.2, 0.5), ph: rand(0, 6.28), sw: rand(0.2, 0.6), a: rand(0.5, 0.9) };
+  }
+  function ball(x, y, vx, vy, delay) {
+    return { x, y, vx, vy, r: rand(9, 18), color: pick(COLORS), rot: rand(-0.4, 0.4), vr: rand(-0.06, 0.06), a: 1, life: 0, delay, stripe: Math.random() < 0.35 };
+  }
+
+  // Opening/submit burst: quick, full-screen, from the bottom corners and center.
+  function burst() {
+    if (reduceMotion) return;
+    const g = 0.5, reach = Math.sqrt(2 * g * h);
+    const n = Math.round(Math.min(170, Math.max(90, (w * h) / 3500)));
+    for (let i = 0; i < n; i++) {
+      const o = i % 3;
+      const x0 = o === 0 ? rand(-20, w * 0.12) : o === 1 ? rand(w * 0.88, w + 20) : rand(w * 0.4, w * 0.6);
+      const vy = -reach * rand(0.6, 1.05), tApex = -vy / g;
+      balls.push(ball(x0, h + 20, (rand(-0.05, 1.05) * w - x0) / tApex, vy, Math.floor(rand(0, 18))));
+    }
+  }
+  // Transition: ornaments rain down from above.
+  function ornamentRain() {
+    const n = Math.round(Math.min(200, Math.max(110, (w * h) / 2600)));
+    for (let i = 0; i < n; i++) balls.push(ball(rand(-10, w + 10), rand(-h * 0.8, -30), rand(-0.6, 0.6), rand(8, 13), Math.floor(rand(0, 8))));
+  }
+
+  function drawBall(b) {
+    const ctx = x2;
+    ctx.save();
+    ctx.globalAlpha = b.a;
+    ctx.translate(b.x, b.y);
+    ctx.rotate(b.rot);
+    // cap + loop
+    ctx.fillStyle = "#c9a04a";
+    ctx.fillRect(-b.r * 0.32, -b.r - b.r * 0.32, b.r * 0.64, b.r * 0.36);
+    ctx.strokeStyle = "#c9a04a"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(0, -b.r - b.r * 0.42, b.r * 0.16, 0, Math.PI * 2); ctx.stroke();
+    // ball
+    ctx.fillStyle = b.color;
+    ctx.beginPath(); ctx.arc(0, 0, b.r, 0, Math.PI * 2); ctx.fill();
+    if (b.stripe) { ctx.fillStyle = "rgba(255,244,224,0.85)"; ctx.fillRect(-b.r, -b.r * 0.18, b.r * 2, b.r * 0.36); }
+    // shine
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.beginPath(); ctx.ellipse(-b.r * 0.38, -b.r * 0.38, b.r * 0.26, b.r * 0.16, -0.7, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    for (const c of [c1, c2]) { c.width = w * dpr; c.height = h * dpr; }
+    x1.setTransform(dpr, 0, 0, dpr, 0, 0); x2.setTransform(dpr, 0, 0, dpr, 0, 0);
+    snow = [];   // no snow indoors
+    if (reduceMotion) draw();
+  }
+  function draw() {
+    x1.clearRect(0, 0, w, h);
+    for (const f of snow) {
+      x1.fillStyle = `rgba(255,255,255,${f.a})`;
+      x1.beginPath(); x1.arc(f.x, f.y, f.r, 0, Math.PI * 2); x1.fill();
+    }
+    x2.clearRect(0, 0, w, h);
+    balls.forEach(b => { if (b.delay <= 0) drawBall(b); });
+  }
+  function tick() {
+    for (const f of snow) {
+      f.ph += 0.01; f.y += f.vy; f.x += Math.sin(f.ph) * f.sw;
+      if (f.y > h + 6) Object.assign(f, makeFlake(false));
+    }
+    for (const b of balls) {
+      if (b.delay > 0) { b.delay--; continue; }
+      b.life++;
+      b.vy += 0.5;
+      if (b.vy > 7) b.vy = 7;
+      b.x += b.vx; b.y += b.vy; b.rot += b.vr;
+      if (b.life > 150) b.a -= 0.02;
+    }
+    balls = balls.filter(b => b.a > 0 && b.y < h + 60);
+    draw();
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+  if (!reduceMotion) { burst(); requestAnimationFrame(tick); }
+</script>
+</body>
+</html>
